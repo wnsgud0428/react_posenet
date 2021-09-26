@@ -45,20 +45,33 @@ function App() {
       const heep_x = pose.keypoints[11].position["x"];
       const heep_y = pose.keypoints[11].position["x"];
 
-      const shol = pose.keypoints[6].position["y"]; //오른쪽 어깨
-      const knee = pose.keypoints[14].position["y"]; //오른쪽 무릎
-      var diff = knee - shol;
+      const shol_y = pose.keypoints[6].position["y"]; //오른쪽 어깨
+      const knee_y = pose.keypoints[14].position["y"]; //오른쪽 무릎
+      var diff = knee_y - shol_y;
       //console.log("어깨" + shol);
       //console.log("무릎" + knee);
 
       const shol_x = pose.keypoints[6].position["x"];
-      console.log(shol_x);
-      if (shol_x > 200 && shol_x < 300)
-        if (diff < 270) { //앉았을때
-          console.log("스퀏!")
+      const knee_x = pose.keypoints[14].position["x"]; //오른쪽 무릎
+
+      var isSholCenter = false;
+      var isKneeCenter = false;
+      if (shol_x > 180 && shol_x < 280) {
+        isSholCenter = true;
+      }
+      if (knee_x > 180 && knee_x < 280) {
+        isKneeCenter = true;
+      }
+      if (isSholCenter && isKneeCenter) {
+        if (diff >= 300)
+          console.log("ready   diff:" + diff)
+        if (diff < 300) { //앉았을때
+          console.log("스퀏!   diff:" + diff)
           squatCount++;
           document.getElementById("count").innerHTML = squatCount;
         }
+      }
+
 
 
 
