@@ -8,6 +8,7 @@ import { drawKeypoints, drawSkeleton } from "./utilities";
 function App() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
+  var squatCount = 0;
 
   //  Load posenet
   const runPosenet = async () => {
@@ -20,7 +21,7 @@ function App() {
     //
     setInterval(() => {
       detect(net);
-    }, 100);
+    }, 2000);
   };
 
   const detect = async (net) => {
@@ -40,7 +41,28 @@ function App() {
 
       // Make Detections
       const pose = await net.estimateSinglePose(video);
-      console.log(pose);
+      //console.log(pose.keypoints[11].position["x"]); //골반 x좌표
+      const heep_x = pose.keypoints[11].position["x"];
+      const heep_y = pose.keypoints[11].position["x"];
+
+      const shol = pose.keypoints[6].position["y"]; //오른쪽 어깨
+      const knee = pose.keypoints[14].position["y"]; //오른쪽 무릎
+      var diff = knee - shol;
+      //console.log("어깨" + shol);
+      //console.log("무릎" + knee);
+
+      const shol_x = pose.keypoints[6].position["x"];
+      console.log(shol_x);
+      if (shol_x > 200 && shol_x < 300)
+        if (diff < 270) { //앉았을때
+          console.log("스퀏!")
+          squatCount++;
+          document.getElementById("count").innerHTML = squatCount;
+        }
+
+
+
+
 
       drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
     }
@@ -61,8 +83,16 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        "Hello World3!"
+      <div>
+        <h1>
+          라이브 비디오 + PoseNet
+        </h1>
+      </div>
+      <div>
+        스쿼트 횟수:
+        <span id="count"></span>
+      </div>
+      <div>
         <Webcam
           ref={webcamRef}
           style={{
@@ -92,7 +122,8 @@ function App() {
             height: 480,
           }}
         />
-      </header>
+      </div>
+
     </div>
   );
 }
