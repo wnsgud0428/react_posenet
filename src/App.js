@@ -20,7 +20,7 @@ function App() {
     //
     setInterval(() => {
       detect(net);
-    }, 1000);
+    }, 100);
   };
 
   const detect = async (net) => {
