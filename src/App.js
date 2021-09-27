@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import React, { useRef } from "react";
 import './App.css';
 import * as tf from "@tensorflow/tfjs";
 import * as posenet from "@tensorflow-models/posenet";
@@ -6,6 +6,7 @@ import Webcam from "react-webcam";
 import { drawKeypoints, drawSkeleton } from "./utilities";
 
 function App() {
+  const [imgSrc, setImgSrc] = React.useState(null); //capture를 위해서?
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   var squatCount = 0;
@@ -69,6 +70,10 @@ function App() {
           console.log("스퀏!   diff:" + diff)
           squatCount++;
           document.getElementById("count").innerHTML = squatCount;
+
+          //screen shot 찍기
+          const imageSrc = webcamRef.current.getScreenshot();
+          setImgSrc(imageSrc);
         }
       }
 
@@ -104,6 +109,11 @@ function App() {
       <div>
         스쿼트 횟수:
         <span id="count"></span>
+      </div>
+      <div>
+        <img
+          src={imgSrc}
+        />
       </div>
       <div>
         <Webcam
