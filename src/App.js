@@ -74,6 +74,8 @@ function App() {
           //screen shot 찍기
           const imageSrc = webcamRef.current.getScreenshot();
           setImgSrc(imageSrc);
+          //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          //todo: 여기 imageSrc를 opencv? python?으로 보내서 처리해야됨!!!
         }
       }
 
