@@ -31,6 +31,7 @@ function App() {
       webcamRef.current !== null &&
       webcamRef.current.video.readyState === 4
     ) {
+
       // Get Video Properties
       const video = webcamRef.current.video;
       const videoWidth = webcamRef.current.video.videoWidth;
@@ -42,19 +43,26 @@ function App() {
 
       // Make Detections
       const pose = await net.estimateSinglePose(video);
-      //console.log(pose.keypoints[11].position["x"]); //골반 x좌표
+
+      //오른쪽 어깨
+      var shol_x = parseFloat(pose.keypoints[6].position["x"]);
+      shol_x.toFixed(2);
+      const shol_y = pose.keypoints[6].position["y"];
+
+      //오른쪽 무릎
+      const knee_x = pose.keypoints[14].position["x"];
+      const knee_y = pose.keypoints[14].position["y"];
+
+      //엉덩이
       const heep_x = pose.keypoints[11].position["x"];
-      const heep_y = pose.keypoints[11].position["x"];
-
-      const shol_y = pose.keypoints[6].position["y"]; //오른쪽 어깨
-      const knee_y = pose.keypoints[14].position["y"]; //오른쪽 무릎
+      const heep_y = pose.keypoints[11].position["y"];
       var diff = knee_y - shol_y;
-      //console.log("어깨" + shol);
-      //console.log("무릎" + knee);
 
-      const shol_x = pose.keypoints[6].position["x"];
-      const knee_x = pose.keypoints[14].position["x"]; //오른쪽 무릎
+      console.log(`어깨 x: ${shol_x}/어깨 y:${shol_y}`);
+      console.log(`무릎 x: ${knee_x}/무릎 y:${knee_y}`);
+      console.log(`엉덩이 x: ${heep_x}/엉덩이 y:${heep_y}`);
 
+      /*
       var isSholCenter = false;
       var isKneeCenter = false;
       if (shol_x > 180 && shol_x < 280) {
@@ -63,6 +71,7 @@ function App() {
       if (knee_x > 180 && knee_x < 280) {
         isKneeCenter = true;
       }
+      
       if (isSholCenter && isKneeCenter) {
         if (diff >= 300)
           console.log("ready   diff:" + diff)
@@ -78,6 +87,12 @@ function App() {
           //todo: 여기 imageSrc를 opencv? python?으로 보내서 처리해야됨!!!
         }
       }
+      */
+
+
+
+
+
 
 
 
