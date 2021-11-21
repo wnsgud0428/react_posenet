@@ -23,9 +23,7 @@ function App() {
       quantBytes: 2,
     });
     //
-    setInterval(() => {
-      detect(net);
-    }, 2000);
+    detect(net);
   };
 
   const detect = async (net) => {
@@ -78,6 +76,22 @@ function App() {
         <span id="count"></span>
       </div>
       <div>
+        <div>
+          <Webcam
+            ref={webcamRef}
+            style={{
+              position: "absolute",
+              marginLeft: "auto",
+              marginRight: "auto",
+              left: 0,
+              right: 0,
+              textAlign: "center",
+              zindex: -1,
+              width: 640,
+              height: 480,
+            }}
+          />
+        </div>
         <img
           ref={imageRef}
           id="testimg"
@@ -100,22 +114,6 @@ function App() {
 
         <canvas
           ref={canvasRef}
-          style={{
-            position: "absolute",
-            marginLeft: "auto",
-            marginRight: "auto",
-            left: 0,
-            right: 0,
-            textAlign: "center",
-            zindex: 9,
-            width: 640,
-            height: 480,
-          }}
-        />
-      </div>
-      <div>
-        <Webcam
-          ref={webcamRef}
           style={{
             position: "absolute",
             marginLeft: "auto",
