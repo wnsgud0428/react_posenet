@@ -4,12 +4,15 @@ import * as tf from "@tensorflow/tfjs";
 import * as posenet from "@tensorflow-models/posenet";
 import Webcam from "react-webcam";
 import { drawKeypoints, drawSkeleton } from "./utilities";
+import imgA from './images/wrong2.jpg'
 
 function App() {
   const [imgSrc, setImgSrc] = React.useState(null); //capture를 위해서?
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   var squatCount = 0;
+
+  const imageRef = useRef(null);
 
   //  Load posenet
   const runPosenet = async () => {
@@ -22,7 +25,7 @@ function App() {
     //
     setInterval(() => {
       detect(net);
-    }, 2000);
+    });
   };
 
   const detect = async (net) => {
@@ -33,17 +36,26 @@ function App() {
     ) {
 
       // Get Video Properties
-      const video = webcamRef.current.video;
+      const video = webcamRef.current.video
       const videoWidth = webcamRef.current.video.videoWidth;
       const videoHeight = webcamRef.current.video.videoHeight;
+
+
+
+
+      const imgid = document.getElementById('testimg');
+      const imageWidth = imgid.width;
+      const imageHeight = imgid.height;
+      imgid.height = 480;
+      imgid.width = 640;
 
       // Set video width
       webcamRef.current.video.width = videoWidth;
       webcamRef.current.video.height = videoHeight;
 
-      // Make Detections
-      const pose = await net.estimateSinglePose(video);
 
+      // Make Detections
+      const pose = await net.estimateSinglePose(imgid);
       //오른쪽 어깨
       var shol_x = parseFloat(pose.keypoints[6].position["x"]);
       shol_x.toFixed(2);
@@ -62,44 +74,7 @@ function App() {
       console.log(`무릎 x: ${knee_x}/무릎 y:${knee_y}`);
       console.log(`엉덩이 x: ${heep_x}/엉덩이 y:${heep_y}`);
 
-      /*
-      var isSholCenter = false;
-      var isKneeCenter = false;
-      if (shol_x > 180 && shol_x < 280) {
-        isSholCenter = true;
-      }
-      if (knee_x > 180 && knee_x < 280) {
-        isKneeCenter = true;
-      }
-      
-      if (isSholCenter && isKneeCenter) {
-        if (diff >= 300)
-          console.log("ready   diff:" + diff)
-        if (diff < 300) { //앉았을때
-          console.log("스퀏!   diff:" + diff)
-          squatCount++;
-          document.getElementById("count").innerHTML = squatCount;
-
-          //screen shot 찍기
-          const imageSrc = webcamRef.current.getScreenshot();
-          setImgSrc(imageSrc);
-          //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-          //todo: 여기 imageSrc를 opencv? python?으로 보내서 처리해야됨!!!
-        }
-      }
-      */
-
-
-
-
-
-
-
-
-
-
-
-      drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
+      drawCanvas(pose, imgid, imageWidth, imageHeight, canvasRef);
     }
   };
 
@@ -128,9 +103,7 @@ function App() {
         <span id="count"></span>
       </div>
       <div>
-        <img
-          src={imgSrc}
-        />
+        <img ref={imageRef} id='testimg' src={imgA} width='640' height='480' alt='testA' />
       </div>
       <div>
         <Webcam
