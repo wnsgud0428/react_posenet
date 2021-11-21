@@ -25,7 +25,7 @@ function App() {
     //
     setInterval(() => {
       detect(net);
-    });
+    }, 2000);
   };
 
   const detect = async (net) => {
@@ -51,23 +51,7 @@ function App() {
 
       // Make Detections
       const pose = await net.estimateSinglePose(imgid);
-      //오른쪽 어깨
-      var shol_x = parseFloat(pose.keypoints[6].position["x"]);
-      shol_x.toFixed(2);
-      const shol_y = pose.keypoints[6].position["y"];
-
-      //오른쪽 무릎
-      const knee_x = pose.keypoints[14].position["x"];
-      const knee_y = pose.keypoints[14].position["y"];
-
-      //엉덩이
-      const heep_x = pose.keypoints[11].position["x"];
-      const heep_y = pose.keypoints[11].position["y"];
-      var diff = knee_y - shol_y;
-
-      console.log(`어깨 x: ${shol_x}/어깨 y:${shol_y}`);
-      console.log(`무릎 x: ${knee_x}/무릎 y:${knee_y}`);
-      console.log(`엉덩이 x: ${heep_x}/엉덩이 y:${heep_y}`);
+      console.log(pose);
 
       drawCanvas(pose, imgid, imageWidth, imageHeight, canvasRef);
     }
@@ -113,15 +97,9 @@ function App() {
             height: 480,
           }}
         />
-      </div>
-      <div>
-        <img
-          ref={imageRef}
-          id="testimg"
-          src={imgA}
-          width="640"
-          height="480"
-          alt="testA"
+
+        <canvas
+          ref={canvasRef}
           style={{
             position: "absolute",
             marginLeft: "auto",
@@ -134,9 +112,10 @@ function App() {
             height: 480,
           }}
         />
-
-        <canvas
-          ref={canvasRef}
+      </div>
+      <div>
+        <Webcam
+          ref={webcamRef}
           style={{
             position: "absolute",
             marginLeft: "auto",
